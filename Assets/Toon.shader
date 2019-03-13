@@ -6,7 +6,7 @@
 	    _Albedo("Albedo", Color) = (1, 1, 1, 1)
 		_RampTex("Ramp Texture", 2D) = "white" {}
 		_OutlineColor("Outline Color",Color) = (0,0,0,1)
-		_OutlineSize("Outline size",Range(.002, 0.1)) = .005
+		_OutlineSize("Outline size",Range(.002, 0.8)) = .005
 	}
 
 		SubShader
@@ -40,7 +40,8 @@
 		}
 		ENDCG
 			Pass{
-			Cull Front
+			
+			 Cull Front
 
 			CGPROGRAM
 #pragma vertex vert
@@ -58,7 +59,7 @@
 			fixed4 color : COLOR;
 		};
 
-		float _Outline;
+		float _OutlineSize;
 		float4 _OutlineColor;
 
 		v2f vert(appdata v) {
@@ -68,7 +69,8 @@
 			float3 norm = normalize(mul((float3x3)UNITY_MATRIX_IT_MV, v.normal));
 			float2 offset = TransformViewToProjection(norm.xy);
 
-			o.pos.xy += offset * o.pos.z * _Outline;
+			//Tamaño de la linea alrededor del cuerpo y profundidad;
+			o.pos.xy += offset * o.pos.z * _OutlineSize;
 			o.color = _OutlineColor;
 			return o;
 		}
